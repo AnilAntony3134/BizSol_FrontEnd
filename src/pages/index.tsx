@@ -1,20 +1,20 @@
-import { useUser } from "@clerk/nextjs";
-import { type NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
-import { api } from "~/utils/api";
-import { LoadingPage, LoadingSpinner } from "~/components/loading";
-import { useState } from "react";
-import { toast } from "react-hot-toast";
-import { PageLayout } from "../components/layout";
-import { PostView } from "../components/postView";
-import { NavBar } from "~/components/navbar";
-import Leftfeed from "~/components/leftfeed";
-import RightFeed from "~/components/rightFeed";
+import { useUser } from "@clerk/nextjs"
+import { type NextPage } from "next"
+import Head from "next/head"
+import Image from "next/image"
+import { api } from "~/utils/api"
+import { LoadingPage, LoadingSpinner } from "~/components/loading"
+import { useState } from "react"
+import { toast } from "react-hot-toast"
+import { PageLayout } from "../components/layout"
+import { PostView } from "../components/postView"
+import { NavBar } from "~/components/navbar"
+import Leftfeed from "~/components/leftfeed"
+import RightFeed from "~/components/rightFeed"
 
 const CreatePostWizard = () => {
   const { user } = useUser()
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState("")
 
   const ctx = api.useContext()
 
@@ -22,23 +22,21 @@ const CreatePostWizard = () => {
 
   const { mutate, isLoading: isPosting } = api.posts.create.useMutation({
     onSuccess: () => {
-      setInput("");
-      void ctx.posts.getAll.invalidate();
+      setInput("")
+      void ctx.posts.getAll.invalidate()
     },
     onError: (e) => {
-      const errorMessage = e.data?.zodError?.fieldErrors?.content;
+      const errorMessage = e.data?.zodError?.fieldErrors?.content
       if (errorMessage && errorMessage[0]) {
-        toast.error(errorMessage[0]);
-      }
-      else {
+        toast.error(errorMessage[0])
+      } else {
         toast.error("Failed to post, please try again later")
       }
-    }
-  });
-
+    },
+  })
 
   return (
-    <div className="border-b border-slate-400 p-8 flex align-middle">
+    <div className="flex border-b border-slate-400 p-8 align-middle">
       <Image
         src={user.profileImageUrl}
         alt="Profile image"
@@ -53,7 +51,7 @@ const CreatePostWizard = () => {
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
-            e.preventDefault();
+            e.preventDefault()
             if (input !== "") {
               mutate({ content: input })
             }
@@ -62,7 +60,9 @@ const CreatePostWizard = () => {
       />
       {input && !isPosting && (
         <button
-          className={"bg-blue-500 hover:bg-blue-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 rounded-md px-6 "}
+          className={
+            "rounded-md bg-blue-500 px-6 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-violet-300 active:bg-violet-700 "
+          }
           onClick={() => mutate({ content: input })}
         >
           Post
@@ -75,11 +75,10 @@ const CreatePostWizard = () => {
       )}
     </div>
   )
-
 }
 
 const Feed = () => {
-  const { data, isLoading: postsLoading } = api.posts.getAll.useQuery();
+  const { data, isLoading: postsLoading } = api.posts.getAll.useQuery()
   const { isLoaded: userLoaded, isSignedIn } = useUser()
   if (postsLoading) return <LoadingPage />
 
@@ -87,7 +86,7 @@ const Feed = () => {
   if (!userLoaded) return <div />
 
   return (
-    <div className="flex flex-col w-1/3">
+    <div className="flex w-1/3 flex-col">
       {isSignedIn && <CreatePostWizard />}
       {data.map((fullPost) => (
         <PostView {...fullPost} key={fullPost.post.id} />
@@ -98,7 +97,7 @@ const Feed = () => {
 
 const Home: NextPage = () => {
   //start fetching a.s.a.p
-  api.posts.getAll.useQuery();
+  api.posts.getAll.useQuery()
 
   return (
     <>
@@ -108,11 +107,19 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+        <div className="mb-200">
+          <NavBar />
+        </div>
       <PageLayout>
-      <NavBar/>
-        <Leftfeed/>
-        <Feed />
-        <RightFeed/>
+        <div>
+          <Leftfeed />
+        </div>
+        <div>
+          <Feed />
+        </div>
+        <div>
+          <RightFeed />
+        </div>
       </PageLayout>
     </>
   )
