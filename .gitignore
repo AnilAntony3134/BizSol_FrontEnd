@@ -8,6 +8,7 @@ tmp
 temp
 coverage
 .turbo
+.next
 
 yarn-error.log
 tsconfig.tsbuildinfo
