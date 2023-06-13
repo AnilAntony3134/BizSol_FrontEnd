@@ -109,7 +109,10 @@ const Home: NextPage = () => {
       </Head>
 
       <PageLayout>
+      <NavBar/>
+        <Leftfeed/>
         <Feed />
+        <RightFeed/>
       </PageLayout>
     </>
   )
