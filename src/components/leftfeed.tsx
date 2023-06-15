@@ -10,7 +10,7 @@ const Leftfeed = () => {
     const { user } = useUser()
     if (!user || !user.fullName || !user.username) return <div />
     return (
-        <div className='fixed bg-[#121212] ml-2 rounded-md mt-6 w-1/8'>
+        <div className='fixed bg-background ml-2 mt-6 w-1/8 border-r-2 border-solid border-secondary'>
             <UserCard image={user.profileImageUrl} name={user.fullName} desc={user.username}/>
             <div className="p-8 flex flex-col items-left justify-between">
                 <h2 className='text-gray-400'>YOUR PAGES</h2>
