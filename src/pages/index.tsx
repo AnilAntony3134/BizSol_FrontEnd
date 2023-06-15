@@ -107,7 +107,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-        <div className="mb-200">
+        <div>
           <NavBar />
         </div>
       <PageLayout>
